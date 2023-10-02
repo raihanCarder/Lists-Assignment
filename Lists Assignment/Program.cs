@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.Remoting.Metadata;
+using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +15,8 @@ namespace Lists_Assignment
         {   // Raihan Carder
             Console.Title = "Lists";
 
-            ListOfIntegers();
+            //ListOfIntegers();
+            Vegetables();
             Console.ReadLine();
         }
 
@@ -212,17 +214,123 @@ namespace Lists_Assignment
                     }
                 }
                 else
-                { 
-                   // make a changedescription tellng them to enter valids election
-                }             
+                {
+                    // make a changedescription tellng them to enter valids election
+                }
                 Console.Clear();
             }
             Console.Write("Click enter to return to menu:");
             Console.ReadLine();
 
-            
+
 
 
         }
+
+
+        public static void Vegetables()
+        {
+            List<string> vegetables = new List<string>() { "CARROT", "BEET", "CELERY", "RADISH", "CABBAGE" };
+            string error = "", addedVegetable;
+            int numberVegetables = 5, selection = 0, removeByIndex;
+            bool quit = false, cleared = false;
+
+            while (!quit)
+            {
+                Console.WriteLine("Vegetables");
+                Console.WriteLine(error);
+                Console.WriteLine();
+                error = "";
+
+                if (!cleared)
+                {
+                    for (int i = 1; i < numberVegetables + 1; i++)
+                    {
+                      
+                        Console.WriteLine($"{i} - {vegetables[i - 1]}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Your list is empty. ");
+                }
+
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("Here's what you can do with this list:");
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("1. Remove a vegetable by Index");
+                Console.WriteLine("2. Remove a vegetable by Value");
+                Console.WriteLine("3. Search for a vegetable");
+                Console.WriteLine("4. Add a vegetable");
+                Console.WriteLine("5. Sort list");
+                Console.WriteLine("6. Clear list");
+                Console.WriteLine("-------------------------------");
+                Console.Write("Type the number corresponding with your decision: ");
+
+                if (int.TryParse(Console.ReadLine(), out selection) && selection > 0 && selection < 7)
+                {
+                    if (selection == 1)
+                    {
+                        if (!cleared)
+                        {
+                            Console.Write("By the index displayed on the screen, What vegetable would you like to remove: ");
+                            if (int.TryParse(Console.ReadLine(), out removeByIndex) && removeByIndex > 0 && removeByIndex <= numberVegetables)
+                            {
+                                vegetables.Remove(vegetables[removeByIndex - 1]);
+                                numberVegetables -= 1;
+                            }
+                        }
+                        else
+                        {
+                            error = "Cannot remove values as list empty. Add new Item";
+                        }
+                    }
+                    else if (selection == 2)
+                    {
+
+                    }
+                    else if (selection == 3)
+                    {
+
+                    }
+                    else if (selection == 4)
+                    {
+                        Console.Write("Type what vegetable you'd like to add:  ");
+                        addedVegetable = Console.ReadLine().ToUpper().Trim();
+                        numberVegetables += 1;
+                        vegetables.Add(addedVegetable);
+                        cleared = false;
+
+                    }
+                    else if (selection == 5)
+                    {
+                        vegetables.Sort();
+                    }
+                    else if (selection == 6)
+                    {
+                        vegetables.Clear();
+                        numberVegetables = 0;
+                        cleared = true;
+                    }
+                    else
+                    {
+                        error = "No valid Selection entered, reselect your option.";
+                    }
+                }
+                else
+                {
+                    error = "No valid Selection entered, reselect your option.";
+                }
+
+                Console.Clear();
+            }
+
+
+
+        }
+
+
+
     }
 }
