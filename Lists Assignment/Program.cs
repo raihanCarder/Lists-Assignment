@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Remoting.Metadata;
 using System.Runtime.Serialization.Formatters;
@@ -13,11 +14,44 @@ namespace Lists_Assignment
     {
         static void Main(string[] args)
         {   // Raihan Carder
+
+            int selection;
+            bool quit = false;
+
             Console.Title = "Lists";
 
-            //ListOfIntegers();
-            Vegetables();
-            Console.ReadLine();
+            while (!quit)
+            {
+                Console.WriteLine("Main Menu");
+                Console.WriteLine();
+                Console.WriteLine("Here's your options: ");
+                Console.WriteLine("1. List of Integers, 2. Vegetables, 3. Quit");
+                Console.Write("Type integer corresponding with what you'd like to see: ");
+                if (int.TryParse(Console.ReadLine(), out selection))
+                {
+                    Console.Clear();
+
+                    if (selection == 1)
+                    {
+                        ListOfIntegers();
+                    }
+                    else if (selection == 2)
+                    {
+                        Vegetables();
+                    }
+                    else if (selection == 3)
+                    {
+                        quit = true;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Error. Click enter.");
+                    Console.ReadLine();
+                    Console.Clear();
+                }
+            }
+            
         }
 
         public static void ListOfIntegers()
@@ -200,10 +234,7 @@ namespace Lists_Assignment
                                 }
                             }
                         }
-                        else
-                        {
 
-                        }
                         changeDescription = $"The value: {selectedOccurence} is in the list {numberOccurences} times.";
 
 
@@ -215,7 +246,7 @@ namespace Lists_Assignment
                 }
                 else
                 {
-                    // make a changedescription tellng them to enter valids election
+                    changeDescription = "Enter valid selection";
                 }
                 Console.Clear();
             }
@@ -231,7 +262,7 @@ namespace Lists_Assignment
         public static void Vegetables()
         {
             List<string> vegetables = new List<string>() { "CARROT", "BEET", "CELERY", "RADISH", "CABBAGE" };
-            string error = "", addedVegetable;
+            string error = "", addedVegetable, search, removeVegiebyString;
             int numberVegetables = 5, selection = 0, removeByIndex;
             bool quit = false, cleared = false;
 
@@ -242,7 +273,7 @@ namespace Lists_Assignment
                 Console.WriteLine();
                 error = "";
 
-                if (!cleared)
+                if (!cleared && vegetables.Count > 0)
                 {
                     for (int i = 1; i < numberVegetables + 1; i++)
                     {
@@ -265,14 +296,15 @@ namespace Lists_Assignment
                 Console.WriteLine("4. Add a vegetable");
                 Console.WriteLine("5. Sort list");
                 Console.WriteLine("6. Clear list");
+                Console.WriteLine("7. Quit");
                 Console.WriteLine("-------------------------------");
                 Console.Write("Type the number corresponding with your decision: ");
 
-                if (int.TryParse(Console.ReadLine(), out selection) && selection > 0 && selection < 7)
+                if (int.TryParse(Console.ReadLine(), out selection) && selection > 0 && selection < 8)
                 {
                     if (selection == 1)
                     {
-                        if (!cleared)
+                        if (!cleared && vegetables.Count > 0)
                         {
                             Console.Write("By the index displayed on the screen, What vegetable would you like to remove: ");
                             if (int.TryParse(Console.ReadLine(), out removeByIndex) && removeByIndex > 0 && removeByIndex <= numberVegetables)
@@ -288,19 +320,52 @@ namespace Lists_Assignment
                     }
                     else if (selection == 2)
                     {
-
+                        if (!cleared && vegetables.Count > 0)
+                        {
+                            Console.Write("Type what Vegetable you'd like to remove: ");
+                            removeVegiebyString = Console.ReadLine().ToUpper().Trim();
+                            if (vegetables.Contains(removeVegiebyString))
+                            {
+                                vegetables.Remove(removeVegiebyString);
+                                numberVegetables -= 1;
+                            }
+                        }
+                        else
+                        {
+                            error = "Cannot remove values as list empty. Add new Item";
+                        }
                     }
                     else if (selection == 3)
                     {
+                        Console.Write("Type what vegetable you'd like to find:  ");
+                        search = Console.ReadLine().ToUpper().Trim();
+
+                        if (vegetables.Contains(search))
+                        {
+                            Console.WriteLine($"Found. Its position on the index is {vegetables.IndexOf(search) + 1}.");
+                            Console.ReadLine();
+                        }
+                        else
+                        {
+                            error = "Could not find.";
+                        }
 
                     }
+                
                     else if (selection == 4)
                     {
                         Console.Write("Type what vegetable you'd like to add:  ");
                         addedVegetable = Console.ReadLine().ToUpper().Trim();
-                        numberVegetables += 1;
-                        vegetables.Add(addedVegetable);
-                        cleared = false;
+
+                        if (!vegetables.Contains(addedVegetable))
+                        {
+                            numberVegetables += 1;
+                            vegetables.Add(addedVegetable);
+                            cleared = false;
+                        }else
+                        {
+                            error = "Could not add to list as it already exists.";
+                        }
 
                     }
                     else if (selection == 5)
@@ -312,6 +377,10 @@ namespace Lists_Assignment
                         vegetables.Clear();
                         numberVegetables = 0;
                         cleared = true;
+                    }
+                    else if (selection == 7)
+                    {
+                        quit = true;
                     }
                     else
                     {
