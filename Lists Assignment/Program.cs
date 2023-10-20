@@ -62,6 +62,8 @@ namespace Lists_Assignment
             string punctuation, changeDescription = "Here are your list of integers";
             bool quit = false;
 
+
+
             for (int i = 0; i < 25; i++)
             {
                 randomValue = generator.Next(10, 21);
@@ -162,7 +164,7 @@ namespace Lists_Assignment
                     else if (selection == 4)
                     {
                         Console.WriteLine();
-                        Console.Write("Add an integer Value to the list within the range 1-20: ");
+                        Console.Write("Add an integer Value to the list within the range 10-20: ");
                         if (int.TryParse(Console.ReadLine(), out newValue) && newValue >= 10 && newValue < 21)
                         {
                             numbers.Add(newValue);
@@ -207,15 +209,47 @@ namespace Lists_Assignment
                     {
                         Console.WriteLine();
 
-                        var groupedNumbers = numbers.GroupBy(n => n);
-                        var maxFrequency = groupedNumbers.Max(g => g.Count());
-                        var modes = groupedNumbers.Where(g => g.Count() == maxFrequency).Select(g => g.Key);
-                        Console.Write("The mode(s) are: ");
-                        foreach (var mode in modes)
+                        // Sorry Mr A, only using these variables here, so I'll put them here.
+
+                        List<int> frequencyList = new List<int>();
+                        int highestFrequency = 0;
+                        int newFrequency = 0;
+                        int frequencyChecker = 10;
+
+                        for (int i = 0; i < 10; i++)
                         {
-                            Console.Write(mode + " ");
+                            for (int j = 0; j < amountNumbers; j++)
+                            {
+                                if (frequencyChecker == numbers[j])
+                                {
+                                    newFrequency += 1;
+                                }
+
+                            }
+
+                            if (newFrequency > highestFrequency)
+                            {
+                                frequencyList.Clear();
+                                frequencyList.Add(frequencyChecker);
+                                highestFrequency = newFrequency;
+
+                            }
+                            else if (newFrequency == highestFrequency)
+                            {
+                                frequencyList.Add(frequencyChecker);
+                            }
+
+                            newFrequency = 0;
+                            frequencyChecker += 1;
                         }
 
+                        Console.WriteLine($"The Mode is/are: ");
+                        for (int i = 0; i < frequencyList.Count(); i++)
+                        {
+                            Console.Write(frequencyList[i] + " ");
+                        }
+
+                        frequencyList.Clear();
                         Console.WriteLine();
                         Console.Write("Click Enter to Continue; ");
                         Console.ReadLine();
